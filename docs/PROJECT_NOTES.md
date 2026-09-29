@@ -71,7 +71,7 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
   `npx next build` succeeds. 3 commits on branch `main` (local only — not pushed yet).
 
 ### NEXT STEPS (resume here)
-1. Write `docs/DEPLOYMENT.md` (Vercel env vars, Supabase Auth URL config + Resend SMTP, Daraja sandbox→production,
+1. ✅ DONE — Write `docs/DEPLOYMENT.md` (Vercel env vars, Supabase Auth URL config + Resend SMTP, Daraja sandbox→production,
    Paystack webhook, Africa's Talking) — adapt from ../alicia-staffing-agency/docs/DEPLOYMENT.md.
 2. Write `docs/PLAY_STORE.md` + `android/twa-manifest.json` (Bubblewrap TWA, package `ke.co.mamaterrycollections.app`,
    assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
@@ -87,3 +87,5 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
 - M-Pesa: Daraja sandbox keys → production Till/Paybill. Until then `MPESA_ENV=simulate` (local only).
 - **Security:** the Supabase DB password and service-role key were shared in chat. Rotate both before launch
   (Supabase → Settings → Database → reset password; Settings → API → rotate keys) and update `.env.local`/Vercel.
+
+> Auto-resume: this chat has session-only timers (one-shot 02:33 on 30 Sep, hourly backup at :47). They stop if VS Code/Claude is closed — then just say "Read docs/PROJECT_NOTES.md and continue."
