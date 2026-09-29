@@ -62,8 +62,23 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
 - ✅ Storefront: home, shop + filters, product page (gallery/zoom, live stock, fly-to-bag), cart drawer, wishlist sync,
   search, auth (sign in/up/reset), checkout (M-Pesa/card/COD, zones, coupons), order tracking + receipt.
 - ✅ Verified end-to-end: guest checkout → simulated M-Pesa → paid order (MT1038).
-- ⏳ In progress: staff dashboard (orders, products + barcodes, POS scanner, inventory, stock-take, cash drawer,
-  reports, team, reviews, notifications, audit, settings), customer account area, info/legal pages, docs, RLS tests.
+- ✅ Staff dashboard: overview, orders (+ detail actions), products editor (photos, variant matrix), barcode labels,
+  Quick Sale POS (camera + USB scanner, cash drawer), inventory (restock/adjust/history), stock counts, cash drawer,
+  reports (profit/sales/stock + CSV), team (perf + permissions), customers, reviews, notifications, audit, settings.
+- ✅ Customer account (orders, addresses, settings, data export, self-service account deletion), wishlist,
+  legal/help pages (privacy, terms, delete-account, delivery-returns, FAQ, contact, about), offline + 404 pages, sitemap/robots.
+- ✅ Verified: `npm run test:rls` (37/37 pass), `node scripts/e2e-checkout.mjs`, `node scripts/e2e-pos.mjs <barcode>`,
+  `npx next build` succeeds. 3 commits on branch `main` (local only — not pushed yet).
+
+### NEXT STEPS (resume here)
+1. Write `docs/DEPLOYMENT.md` (Vercel env vars, Supabase Auth URL config + Resend SMTP, Daraja sandbox→production,
+   Paystack webhook, Africa's Talking) — adapt from ../alicia-staffing-agency/docs/DEPLOYMENT.md.
+2. Write `docs/PLAY_STORE.md` + `android/twa-manifest.json` (Bubblewrap TWA, package `ke.co.mamaterrycollections.app`,
+   assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
+3. Capture store screenshots into `public/screenshots/{home,product,checkout}.png` (1080×1920) — manifest already references them.
+4. Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.
+5. Connect GitHub (user creates repo, then `git remote add origin … && git push -u origin main`) and deploy to Vercel.
+6. Owner to confirm: store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
 
 ## Open items / decisions for the owner
 - Real store details: phone, WhatsApp, email, pickup address/hours, social links (Dashboard → Settings).
