@@ -1,0 +1,247 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>MamaTerryCollections — Fashion E-Commerce Platform</h1>
+<h3>Build brief, MVP scope, Claude Code prompt and budget</h3>
+<h2>1. Concept</h2>
+<p>A branded online store for clothes, bags, caps and related fashion items — customers browse, pick sizes/colours, pay, and track their order; the owner runs the whole business from one dashboard: stock levels, cost vs. selling price on every item, barcodes for physical stock-taking and in-person sales, and a sales team she can add, monitor and appraise. Built as a website plus an installable app, not a third-party marketplace listing — MamaTerryCollections owns its customers, its branding, and its data.</p>
+<h2>2. What Kenyan fashion e-commerce actually looks like right now</h2>
+<p>Most Kenyan clothing businesses today run through Facebook/Instagram/WhatsApp, with boda boda (motorbike) delivery and payment by M-Pesa or cash on delivery — direct buyer-seller engagement without a &quot;real&quot; storefront <em>(source: African Business)</em>. That's exactly the gap a proper website + app closes: it looks and feels professional, it doesn't depend on an algorithm showing your post, and it doesn't get lost in someone's DMs.</p>
+<p>A few hard facts worth designing around: credit card penetration in Kenya is under 5%, so <strong>M-Pesa has to be the default payment method, not an add-on</strong> — international cards decline often for fraud checks, bank transfers are slow, and cash-on-delivery carries a high return/no-show rate <em>(source: IntaSend)</em>. Note too that mainstream platforms like Shopify don't support M-Pesa natively — stores there route through a third-party gateway (Paystack, DPO, Flutterwave, or Kenya-focused providers like IntaSend) <em>(source: Shopify community; IntaSend)</em>. Building your own stack with Supabase and the Daraja API directly avoids that layer entirely.</p>
+<p>Local Kenyan agencies selling &quot;online store setup&quot; packages standardise on: M-Pesa STK Push checkout, Kenyan shipping zones (Nairobi / counties / nationwide) often integrated with courier services like <strong>Sendy or Fargo</strong>, mobile-first design (most Kenyan shoppers are on phones), real-time inventory with low-stock alerts, customer accounts with order tracking, and SMS order notifications <em>(source: Hostiko Kenya)</em> — every one of those is in the MVP below. And <strong>Driplift Kenya</strong> shows the direct competitor shape: a clothing/shoes/accessories store with both a website and a Play Store app <em>(source: Gust company profile)</em> — confirming that customers here do expect an installable app alongside the site, not just a webpage.</p>
+<h2>3. Roles &amp; access</h2>
+<ul>
+<li><strong>Owner</strong> — full access: catalog, pricing, cost prices/margins, all orders, all staff, reports, settings</li>
+<li><strong>Sales Manager</strong> (owner adds these) — manages the catalog and stock for assigned categories, processes and fulfils orders, applies discounts up to an owner-set limit, views their own and their team's sales performance; cannot see other managers' cost-price/margin data unless the owner grants it</li>
+<li><strong>Sales Attendant/Cashier</strong> (for in-person sales at a physical stall/shop, if she has one) — can run the barcode &quot;quick sale&quot; flow, cannot edit prices or view profit margins</li>
+<li><strong>Customer</strong> — browses, buys, tracks orders, manages their own account</li>
+<li>All access enforced at the backend (Row-Level Security), not just hidden in the UI</li>
+</ul>
+<h2>4. Core modules</h2>
+<h3>Storefront (customer-facing)</h3>
+<ul>
+<li>Product catalog with categories — <strong>Clothes, Bags, Caps</strong>, plus <strong>owner-extensible categories</strong> for anything new she starts stocking (shoes, jewellery, etc. — not hardcoded)</li>
+<li>Each product: multiple images, description, price, available sizes and colours (variants), stock status per variant (&quot;In Stock&quot; / &quot;Low Stock&quot; / &quot;Sold Out&quot;)</li>
+<li>Search, filter (category, size, colour, price range), and a &quot;browse more&quot; recommendation strip (related/same-category items) so customers keep discovering stock</li>
+<li>Wishlist/save-for-later, product reviews and star ratings</li>
+<li>Cart, guest checkout option, and full customer accounts (order history, saved delivery addresses, saved payment preference)</li>
+</ul>
+<h3>Checkout &amp; payments — &quot;preferred payment/selling procedures&quot;</h3>
+<ul>
+<li>Payment methods configurable by the owner: <strong>M-Pesa STK Push</strong> (default/primary), card via Paystack/Flutterwave as a fallback, and <strong>Cash on Delivery</strong> if she wants to offer it for specific areas (with the return-rate risk noted above, so make it toggleable per delivery zone rather than blanket-on)</li>
+<li>Delivery options: courier/boda delivery with configurable zone-based fees (Nairobi / other counties / nationwide, matching the local standard above), or customer pickup from a physical location if she has one</li>
+<li>Order status pipeline: Placed → Confirmed → Packed → Out for Delivery/Ready for Pickup → Delivered/Collected → (Returned, if applicable)</li>
+<li>Every order generates a receipt/invoice; SMS and email sent at each status change</li>
+</ul>
+<h3>Stock, barcodes &amp; profit margins (owner dashboard — this is the core ask)</h3>
+<ul>
+<li>Every product <strong>variant</strong> (a specific size + colour combination) gets its own SKU and an <strong>auto-generated barcode</strong>, printable as a sticker — used both for physical stock counts and for a quick in-person &quot;scan to sell&quot; mode at a stall or shop counter, alongside the normal online checkout</li>
+<li>Real-time stock per variant, automatically decremented by both online orders and in-person barcode sales, with low-stock alerts</li>
+<li><strong>Profit margin, calculated automatically</strong>: cost price vs. selling price per variant, gross margin %, and total profit across any date range, by product, by category, or store-wide — visible to the owner (and to sales managers only if she grants that visibility)</li>
+<li>Stock valuation: total cost-basis and retail-basis value of everything currently in stock</li>
+<li>Purchase/restock tracking: record new stock received, update cost price if a new batch cost differently</li>
+</ul>
+<h3>Sales team management &amp; performance</h3>
+<ul>
+<li>Owner adds Sales Managers (and Sales Attendants for in-person sales), assigns them to categories or the whole catalog</li>
+<li>Per-staff performance: sales value, number of orders/transactions handled, average order value, any voided/corrected sales — the same appraisal-ready record pattern used across your other builds, visible to the owner for reviews</li>
+</ul>
+<h3>Notifications</h3>
+<ul>
+<li>New order placed, payment received, low stock on a variant, order status needs action (e.g. ready to pack), customer review submitted, cash discrepancy (for in-person sales)</li>
+</ul>
+<h3>Audit log</h3>
+<ul>
+<li>Every price change, stock adjustment, discount override, and voided/refunded order logged with who did it and when — orders are voided/refunded with a reason, never silently deleted</li>
+</ul>
+<h2>5. Recommended stack</h2>
+<p>Same core pattern as your other builds, for consistency:</p>
+<ul>
+<li><strong>Web:</strong> Next.js (App Router), TypeScript, Tailwind CSS, Framer Motion — the storefront especially benefits from polish here (product image zoom/gallery transitions, smooth cart drawer, animated &quot;added to cart&quot; feedback), deployed on Vercel</li>
+<li><strong>App:</strong> installable PWA first (covers &quot;website and app&quot; without app-store overhead, same reasoning as your other lean builds); Expo/React Native later only if she specifically wants Play Store/App Store presence for marketing reasons</li>
+<li><strong>Backend:</strong> Supabase — Postgres with Row-Level Security, Auth, Storage (product images), Realtime (stock updates, order status)</li>
+<li><strong>Barcode:</strong> <code>JsBarcode</code> (or similar) to generate/print variant barcodes; <code>@zxing/browser</code> or <code>quagga.js</code> for in-browser camera barcode scanning in the quick-sale mode</li>
+<li><strong>Payments:</strong> M-Pesa Daraja API (STK Push) direct integration as primary; Paystack or Flutterwave for card fallback</li>
+<li><strong>Delivery:</strong> manual zone/fee configuration at launch; Sendy or Fargo API integration later if courier volume justifies it</li>
+<li><strong>Notifications:</strong> Africa's Talking (SMS), Resend (email)</li>
+<li><strong>Ops:</strong> GitHub (connected), Vercel, Supabase project already provisioned</li>
+</ul>
+<h2>6. Full prompt — paste this into Claude Code</h2>
+<pre><code>Project: MamaTerryCollections — a fashion e-commerce website and installable app selling
+clothes, bags, caps and related items in Kenya, with a full owner dashboard for stock,
+barcodes, profit margins, and a sales team the owner can add and evaluate.
+
+TECH STACK
+- Next.js 14 (App Router), TypeScript, Tailwind CSS, Framer Motion, deployed on Vercel
+- Build as an installable PWA covering both &#34;website&#34; and &#34;app&#34; requirements; only add a true
+  Expo/React Native app later if specifically requested
+- Backend: Supabase — Postgres with Row-Level Security, Auth, Storage, Realtime
+- Barcode: JsBarcode (or equivalent) to generate/print variant barcodes; @zxing/browser or
+  quagga.js for in-browser camera barcode scanning (quick in-person sale mode)
+- Payments: M-Pesa Daraja API (STK Push) as primary; Paystack or Flutterwave for card fallback
+- Notifications: Africa&#39;s Talking (SMS), Resend (email)
+- Repo already connected to GitHub; Supabase project already provisioned — wire into those,
+  don&#39;t create new ones
+
+ROLES (Supabase Auth + RLS policies per role, enforced at the backend not just the UI)
+1. owner — full access: catalog, pricing, cost prices, margins, all orders, staff, reports
+2. sales_manager — manages assigned categories/stock, processes and fulfils orders, applies
+   discounts up to an owner-configured limit, sees own/team performance; cost price and margin
+   visibility is an owner-controlled flag per manager
+3. sales_attendant — runs the in-person barcode quick-sale flow only; no pricing/margin access
+4. customer — browses, buys, tracks own orders, manages own account
+
+CORE DATA MODEL (Postgres/Supabase — adjust names as needed but keep this shape)
+- categories (id, name, parent_category_id (nullable)) — OWNER-EDITABLE. Seed: Clothes, Bags,
+  Caps, Other. Owner must be able to add/rename/remove at any time — do not hardcode this list.
+- products (id, category_id, name, description, base_price, images: array of storage URLs,
+  active, created_at)
+- product_variants (id, product_id, size, colour, sku (unique), barcode_value (unique,
+  auto-generated on creation), cost_price, selling_price, quantity_on_hand,
+  low_stock_threshold)
+- customers (id, user_id, name, phone, email, saved_addresses: jsonb)
+- carts (id, customer_id or session_id, status) and cart_items (cart_id, variant_id, quantity)
+- orders (id, customer_id, status: placed/confirmed/packed/out_for_delivery/delivered/returned/
+  cancelled, delivery_method: courier/pickup, delivery_zone, delivery_fee, payment_method:
+  mpesa/card/cod, payment_status, subtotal, total, placed_at, handled_by_staff_id (nullable,
+  for in-person sales))
+- order_items (id, order_id, variant_id, quantity, unit_price_at_sale, line_total)
+- payments (id, order_id, amount, method, mpesa_ref (nullable), status, paid_at)
+- reviews (id, product_id, customer_id, rating 1-5, comment, created_at)
+- staff (id, user_id, role: sales_manager/sales_attendant, name, phone, assigned_category_ids,
+  can_view_margins: boolean, is_active)
+- stock_adjustments (id, variant_id, quantity_delta, reason: restock/damage/correction,
+  new_cost_price (nullable), adjusted_by_staff_id, created_at)
+- audit_log (id, actor_id, action, target_table, target_id, previous_value, new_value,
+  created_at)
+- notifications (id, type: new_order/payment_received/low_stock/order_needs_action/
+  new_review/cash_discrepancy, message, target_user_id, target_role, read: boolean, created_at)
+
+BUILD IN PHASES
+
+Phase 1 — Foundation
+- Supabase schema + RLS policies per role above
+- Auth for owner, staff (email/password), and customers (phone OTP or email)
+- PWA setup: manifest, installable, offline shell for the storefront
+
+Phase 2 — Storefront &amp; catalog
+- Public product catalog: browse by category, filter (size/colour/price), search, product
+  detail page with image gallery and variant (size/colour) picker showing live stock
+  (&#34;In Stock&#34;/&#34;Low Stock&#34;/&#34;Sold Out&#34;)
+- Owner/sales-manager product &amp; variant management: create products, add variants, upload
+  images, set cost and selling price per variant — auto-generate a unique barcode per
+  variant on creation, with a printable label view (name, size/colour, price, barcode)
+
+Phase 3 — Cart, checkout &amp; payments
+- Cart (guest and logged-in), wishlist, &#34;browse more&#34; related-items strip
+- Checkout: delivery method (courier with zone-based fee, or pickup), payment method
+  (M-Pesa STK Push primary, card fallback, Cash on Delivery as an owner-toggleable option
+  per delivery zone)
+- Order confirmation, SMS/email at each order-status change, printable/shareable receipt
+
+Phase 4 — In-person &#34;quick sale&#34; mode &amp; stock management
+- Camera-based barcode scanning: scan a variant&#39;s barcode, add to a running in-person sale
+  cart, checkout the same way as online (cash/M-Pesa/card), stock decrements automatically
+  — usable by sales_attendant and sales_manager roles at a physical stall/counter
+- Restock flow: scan or select a variant, enter quantity received and optionally a new cost
+  price, stock increments; manual stock_adjustment flow for damage/loss/correction
+
+Phase 5 — Owner dashboard: profit, stock value &amp; sales team
+- Profit margin report: cost vs. selling price per variant, gross margin %, total profit —
+  filterable by date range, product, category, or store-wide; owner-only by default
+- Stock valuation: total cost-basis and retail-basis value of current inventory
+- Sales-team management: owner adds/edits sales_manager and sales_attendant accounts,
+  assigns categories, sets discount limits, toggles margin visibility per manager
+- Per-staff performance dashboard: sales value, orders/transactions handled, average order
+  value, any voided sales — visible to owner for appraisal
+
+Phase 6 — Reviews, notifications, audit
+- Product reviews/ratings, moderation queue for the owner
+- Notification center: new orders, payments received, low stock, orders needing action,
+  new reviews, cash discrepancies from in-person sales
+- Full audit log: every price change, stock adjustment, discount override, and voided/
+  refunded order, with who/when — never hard-delete an order, only void/refund with a reason
+
+Phase 7 — Hardening &amp; deployment
+- RLS review: sales_attendant must never see cost prices or margins; a sales_manager without
+  can_view_margins must not either; a customer must only ever see their own orders
+- Seed demo products across all categories with variants for testing
+- Deploy to Vercel; confirm PWA installs correctly on Android/iOS; confirm the barcode
+  scanner works reliably under real store lighting, not just a demo environment
+
+DESIGN
+Storefront should feel like a real fashion brand, not a spreadsheet: full-bleed product
+photography, generous whitespace, smooth image transitions and a satisfying add-to-cart
+animation (Framer Motion). Owner/staff dashboards should be the opposite — dense, fast,
+legible, large tap targets for the in-store barcode scan flow.
+
+Do not hardcode categories, sizes, or colours anywhere — these are owner-editable, per the
+requirement to keep adding more kinds of items (bags, caps, and whatever comes next) without
+a code change.
+
+Confirm the plan with me before writing code, then build phase by phase, committing to
+GitHub and pushing schema migrations to Supabase as you go.
+</code></pre>
+<h2>7. Standalone budget</h2>
+<p><strong>Build cost (Claude/Claude Code):</strong> a real e-commerce storefront with variants, barcode scanning, payments and a staff performance dashboard is mid-to-large scope — comparable to Masters Lounge, lighter than the exam portal or multi-shop system. Budget <strong>Max 5x ($100/month) for 3–5 weeks</strong>, or Pro ($20/month) over a longer stretch if you're in less of a hurry.</p>
+<p><strong>Running costs once live:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supabase Pro (product images, realtime stock)</td>
+<td>~$25/mo</td>
+</tr>
+<tr>
+<td>Vercel Pro (public storefront traffic)</td>
+<td>~$20/mo</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>~$12–15/yr</td>
+</tr>
+<tr>
+<td>M-Pesa Daraja API</td>
+<td>Free (Safaricom transaction charges apply per payment)</td>
+</tr>
+<tr>
+<td>Card fallback (Paystack/Flutterwave)</td>
+<td>No fixed fee, transaction % on card payments only</td>
+</tr>
+<tr>
+<td>SMS (order status updates)</td>
+<td>~KES 3,000–8,000/mo depending on order volume</td>
+</tr>
+<tr>
+<td>Courier integration (Sendy/Fargo), if added later</td>
+<td>Usage-based, get a quote once volume justifies it</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~$45–65/month, before payment-processing transaction fees</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Traditional-build comparison:</strong> Kenyan agencies quote WooCommerce-based store setups from <strong>KSh 40,000</strong> for a basic package (up to 50 products, M-Pesa STK Push, basic shipping zones) up to <strong>KSh 120,000+</strong> for an enterprise package (unlimited products, custom design, ERP integration, advanced analytics) <em>(source: Hostiko Kenya)</em> — and that's before the barcode/in-person-sale integration and staff-performance dashboard this brief includes, which push a fully custom equivalent toward the higher end of that range or beyond.</p>
+<h2>8. Setup checklist before you hand this to Claude Code</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Confirm the display name/logo for the storefront (MamaTerryCollections as given, or a
+shortened version for the app icon if needed)</li>
+<li><input disabled="" type="checkbox"> Supabase project ready, keys available</li>
+<li><input disabled="" type="checkbox"> GitHub repo connected</li>
+<li><input disabled="" type="checkbox"> M-Pesa Daraja developer account (sandbox first, production Till/Paybill after)</li>
+<li><input disabled="" type="checkbox"> Africa's Talking account for SMS order updates</li>
+<li><input disabled="" type="checkbox"> Decide delivery zones and fees upfront (Nairobi, other counties, nationwide), and
+whether Cash on Delivery is offered anywhere given its higher return-rate risk</li>
+<li><input disabled="" type="checkbox"> Product photos and starting catalog (names, categories, sizes/colours, cost and
+selling prices) to seed the real store instead of demo data</li>
+<li><input disabled="" type="checkbox"> A small roll of sticker labels for printed variant barcodes if she also sells in person</li>
+<li><input disabled="" type="checkbox"> List of who the sales managers/attendants will be, so accounts and category
+assignments are correct from launch</li>
+</ul>
+
+</body></html>

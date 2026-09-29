@@ -6,20 +6,44 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:push": "node scripts/db-push.mjs",
+    "db:types": "node scripts/gen-types.mjs",
+    "db:sql": "node scripts/sql.mjs",
+    "create-owner": "node scripts/create-owner.mjs",
+    "seed": "node scripts/seed-demo.mjs",
+    "test:rls": "node scripts/test-rls.mjs",
+    "icons": "node scripts/icons.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
+    "@zxing/browser": "^0.2.1",
+    "@zxing/library": "^0.23.0",
+    "jsbarcode": "^3.12.3",
+    "lucide-react": "^1.48.0",
+    "motion": "^13.4.6",
     "next": "16.3.7",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "web-push": "^3.6.7",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/web-push": "^3.6.4",
+    "dotenv": "^18.0.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
+    "pg": "^8.23.0",
+    "sharp": "^0.35.5",
+    "supabase": "^2.118.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
