@@ -73,7 +73,7 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
 ### NEXT STEPS (resume here)
 1. ✅ DONE — Write `docs/DEPLOYMENT.md` (Vercel env vars, Supabase Auth URL config + Resend SMTP, Daraja sandbox→production,
    Paystack webhook, Africa's Talking) — adapt from ../alicia-staffing-agency/docs/DEPLOYMENT.md.
-2. Write `docs/PLAY_STORE.md` + `android/twa-manifest.json` (Bubblewrap TWA, package `ke.co.mamaterrycollections.app`,
+2. ✅ DONE — Write `docs/PLAY_STORE.md` + `android/twa-manifest.json` (Bubblewrap TWA, package `ke.co.mamaterrycollections.app`,
    assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
 3. Capture store screenshots into `public/screenshots/{home,product,checkout}.png` (1080×1920) — manifest already references them.
 4. Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.

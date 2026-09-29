@@ -44,3 +44,9 @@ next-env.d.ts
 
 # local-only credentials for demo accounts
 docs/LOCAL_CREDENTIALS.md
+
+# Android signing key (never commit)
+*.keystore
+android/app-release*
+android/app/
+android/build/
