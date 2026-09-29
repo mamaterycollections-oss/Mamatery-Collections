@@ -105,7 +105,7 @@ export async function sendPush(userIds: string[], title: string, body: string, l
 export function alertStaff(roles: Enums<'app_role'>[], title: string, body: string, link: string, email = false) {
   after(async () => {
     const admin = createAdminClient()
-    const { data: people } = await admin.from('profiles').select('id, email, role, staff(is_active)').in('role', roles)
+    const { data: people } = await admin.from('profiles').select('id, email, role, staff!staff_user_id_fkey(is_active)').in('role', roles)
     const active = (people ?? []).filter((p) => {
       const s = Array.isArray(p.staff) ? p.staff[0] : p.staff
       return p.role === 'owner' || s?.is_active

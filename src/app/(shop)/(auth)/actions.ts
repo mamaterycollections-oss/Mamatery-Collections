@@ -30,7 +30,7 @@ export async function signIn(_: AuthState, form: FormData): Promise<AuthState> {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return { error: authError(error.message), fields: { email } }
 
-  const { data: profile } = await supabase.from('profiles').select('role, staff(is_active)').eq('id', data.user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('role, staff!staff_user_id_fkey(is_active)').eq('id', data.user.id).single()
   const staff = Array.isArray(profile?.staff) ? profile.staff[0] : profile?.staff
   if (profile && profile.role !== 'customer' && profile.role !== 'owner' && !staff?.is_active) {
     await supabase.auth.signOut()

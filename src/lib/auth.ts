@@ -28,7 +28,7 @@ export const getSession = cache(async (): Promise<Session | null> => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, role, full_name, email, phone, staff(is_active, can_view_margins, discount_limit_pct, assigned_category_ids)')
+    .select('id, role, full_name, email, phone, staff!staff_user_id_fkey(is_active, can_view_margins, discount_limit_pct, assigned_category_ids)')
     .eq('id', userId)
     .single()
   if (!profile) return null
