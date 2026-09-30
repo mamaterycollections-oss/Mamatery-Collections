@@ -78,9 +78,20 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
    assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
 3. ✅ DONE (re-run `node scripts/store-screenshots.mjs` with real products before launch) — Capture store screenshots into `public/screenshots/{home,product,checkout}.png` (1080×1920) — manifest already references them.
 4. ✅ DONE — Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.
-5. ✅ GitHub connected and pushed (30 Sep 2026). **(YOU)** Deploy to Vercel: import the repo, add env vars from `.env.local` — see `docs/DEPLOYMENT.md`.
-   The repo is public: never commit `.env.local`, keys or `docs/LOCAL_CREDENTIALS.md` (all git-ignored).
-6. **(OWNER)** Confirm store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
+5. ✅ GitHub connected and pushed (30 Sep 2026). The repo is public: never commit `.env.local`, keys or `docs/LOCAL_CREDENTIALS.md` (all git-ignored).
+6. ✅ Vercel deployed (30 Sep 2026): **https://mamatery-collections.vercel.app** — project `mamatery-collections`, account
+   `mamaterycollections-oss`, auto-deploys on every push to `main`. Local folder is linked (`.vercel/`, CLI logged in).
+   Smoke-tested: home, shop, product pages, images, checkout, login, dashboard redirect, sitemap, cron auth.
+   **(YOU) still to do:**
+   - Vercel → Settings → Environment Variables: delete `MPESA_ENV` (it is `simulate` — would fake payments on preview
+     deployments), `DATABASE_URL` and `NEXT_PUBLIC_SITE_URL` (not needed on Vercel). Claude was not permitted to remove them.
+   - Supabase → Authentication → URL Configuration: Site URL `https://mamatery-collections.vercel.app`, add redirect
+     `https://mamatery-collections.vercel.app/**` (DEPLOYMENT.md §3), plus Resend SMTP.
+   - No payment method works live yet: add Daraja (`MPESA_*` with `MPESA_ENV=sandbox`/`production`) and/or
+     `PAYSTACK_SECRET_KEY`, or turn on cash on delivery per zone. Then `RESEND_API_KEY`/`EMAIL_FROM`, `AFRICASTALKING_*`.
+   - Rotate Supabase DB password + service-role key, update `.env.local` and Vercel, redeploy.
+   - Hobby plan is non-commercial only — upgrade to Pro before taking real orders.
+7. **(OWNER)** Confirm store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
 
 All build work that doesn't need you is finished (session 1 end, 30 Sep 2026). Extra polish done at the end: COD orders
 alert staff by push/email, "Install app" prompt on the storefront, lint clean, production build passes (55 pages).
