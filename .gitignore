@@ -50,3 +50,6 @@ docs/LOCAL_CREDENTIALS.md
 android/app-release*
 android/app/
 android/build/
+
+.vercel
+.env*
