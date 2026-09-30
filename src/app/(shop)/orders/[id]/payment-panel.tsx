@@ -25,11 +25,12 @@ export function PaymentPanel({ orderId, token, method, total, phone: initialPhon
   const [error, setError] = useState<string | null>(initialError)
   const [phone, setPhone] = useState(initialPhone.startsWith('+254') ? `0${initialPhone.slice(4)}` : initialPhone)
   const [pending, start] = useTransition()
-  const started = useRef(Date.now())
+  const started = useRef(0)
 
   // Poll while the customer approves on their phone (up to ~3 minutes).
   useEffect(() => {
     if (state !== 'waiting' || method !== 'mpesa') return
+    if (!started.current) started.current = Date.now()
     let stop = false
     const tick = async () => {
       if (stop) return

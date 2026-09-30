@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Heart, Star } from 'lucide-react'
 import { useWishlist } from '@/components/wishlist-provider'
@@ -18,7 +19,8 @@ export function ProductCard({ product, index = 0, colourHex = {}, priority = fal
   const price = product.price_min ?? product.base_price
   const onSale = product.compare_at_price != null && Number(product.compare_at_price) > Number(price)
   const soldOut = product.total_stock <= 0
-  const isNew = Date.now() - new Date(product.created_at).getTime() < NEW_DAYS * 86400000
+  const [now] = useState(() => Date.now())
+  const isNew = now - new Date(product.created_at).getTime() < NEW_DAYS * 86400000
   const lowStock = !soldOut && product.total_stock <= 3
   const [first, second] = product.images
 

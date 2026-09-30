@@ -51,7 +51,7 @@ export function CartDrawer({ freeDeliveryThreshold }: { freeDeliveryThreshold: n
             <AnimatePresence>
               {lastAdded && (
                 <motion.div
-                  key={lastAdded.variantId + String(Date.now())}
+                  key={`${lastAdded.variantId}-${lastAdded.nonce}`}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}

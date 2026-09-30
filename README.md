@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MamaTerryCollections
 
-## Getting Started
+Fashion e-commerce website + installable app (PWA / Google Play) for clothes, bags and caps in Kenya, with an owner dashboard for stock, barcodes, in-store sales, profit margins and staff performance.
 
-First, run the development server:
+**Start here:** [`docs/PROJECT_NOTES.md`](docs/PROJECT_NOTES.md) — status, decisions and next steps.
+Going live: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · Google Play: [`docs/PLAY_STORE.md`](docs/PLAY_STORE.md)
+
+## Features
+
+**Customers** — editorial storefront, search, filters (size, colour, price), product gallery with zoom, live stock per size/colour, wishlist, reviews, guest or account checkout, M-Pesa STK Push / card / cash on delivery, delivery zones, discount codes, SMS/email/push order updates, order tracking, receipts, installable app, offline support, self-service data download and account deletion.
+
+**Staff** — dashboard KPIs, order pipeline, product editor with automatic SKUs and EAN-13 barcodes, printable barcode labels, Quick Sale POS (camera or USB scanner, cash drawer, M-Pesa till codes or STK), inventory restock/adjust with full history, stock counts, profit & margin reports with CSV, stock valuation, staff management with per-person discount limits and margin visibility, performance for appraisals, review moderation, real-time notifications, full audit log, owner settings (categories, sizes, colours, zones, payments, coupons).
+
+**Security** — enforced in Postgres with row-level security and checked functions; cost prices live in separate tables only the owner (and managers she authorises) can read. `npm run test:rls` proves it (37 checks).
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # fill in values
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Command | |
+| --- | --- |
+| `npm run db:push` | apply `supabase/migrations` + regenerate types |
+| `npm run seed` / `npm run seed -- --clear` | demo catalog, accounts and orders (logins in `docs/LOCAL_CREDENTIALS.md`, git-ignored) |
+| `npm run create-owner -- email "Name"` | real owner login |
+| `npm run test:rls` | security tests |
+| `node scripts/e2e-checkout.mjs` · `node scripts/e2e-pos.mjs <barcode>` | end-to-end purchase / POS tests (dev server running) |
+| `npm run icons` · `node scripts/store-screenshots.mjs` | app icons & store graphics · Play screenshots |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Stack: Next.js 16 · TypeScript · Tailwind CSS 4 · Motion · Supabase (Postgres, Auth, Storage, Realtime, pg_cron) · M-Pesa Daraja · Paystack · Africa's Talking · Resend · Web Push.

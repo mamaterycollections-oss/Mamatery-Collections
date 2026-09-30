@@ -22,7 +22,7 @@ type CartCtx = {
   subtotal: number
   open: boolean
   setOpen: (open: boolean) => void
-  lastAdded: CartLine | null
+  lastAdded: (CartLine & { nonce: number }) | null
   add: (line: Omit<CartLine, 'quantity'>, quantity?: number) => void
   setQuantity: (variantId: string, quantity: number) => void
   remove: (variantId: string) => void
@@ -51,7 +51,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const { userId } = useAuth()
   const [lines, setLines] = useState<CartLine[]>([])
   const [open, setOpen] = useState(false)
-  const [lastAdded, setLastAdded] = useState<CartLine | null>(null)
+  const [lastAdded, setLastAdded] = useState<(CartLine & { nonce: number }) | null>(null)
+  const addCount = useRef(0)
   const hydrated = useRef(false)
   const syncedUser = useRef<string | null>(null)
 
@@ -137,7 +138,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         next = Math.min(quantity, cap)
         return [...current, { ...line, quantity: next }]
       })
-      setLastAdded({ ...line, quantity })
+      setLastAdded({ ...line, quantity, nonce: ++addCount.current })
       setOpen(true)
       queueMicrotask(() => pushRemote(line.variantId, next))
     },

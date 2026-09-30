@@ -1,6 +1,7 @@
 import { CartDrawer } from '@/components/cart/cart-drawer'
 import { Footer } from '@/components/shop/footer'
 import { Header } from '@/components/shop/header'
+import { InstallPrompt } from '@/components/shop/install-prompt'
 import { TabBar } from '@/components/shop/tab-bar'
 import { getCategories, getSettings } from '@/lib/store'
 
@@ -17,6 +18,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
       <Footer settings={settings} categories={top} />
       <CartDrawer freeDeliveryThreshold={settings.free_delivery_threshold != null ? Number(settings.free_delivery_threshold) : null} />
       <TabBar />
+      <InstallPrompt />
     </>
   )
 }

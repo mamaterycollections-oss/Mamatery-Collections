@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import { getSession } from '@/lib/auth'
-import { notifyCustomerOrder } from '@/lib/notify'
+import { alertStaff, notifyCustomerOrder } from '@/lib/notify'
 import { startCardPayment, startMpesaPayment } from '@/lib/payments'
 import { rateLimit } from '@/lib/rate-limit'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -108,6 +108,7 @@ export async function placeOrder(input: PlaceOrderInput): Promise<PlaceOrderResu
   const result = { orderId: order.id, token: order.tracking_token }
   if (v.payment === 'cod') {
     notifyCustomerOrder(order.id, 'placed')
+    alertStaff(['owner', 'sales_manager'], 'New cash-on-delivery order', `${v.name} · ${v.method === 'courier' ? 'delivery' : 'pickup'} — confirm by phone`, `/dashboard/orders/${order.id}`, true)
     return result
   }
   try {

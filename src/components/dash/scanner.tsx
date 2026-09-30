@@ -34,7 +34,9 @@ export function CameraScanner({ onScan, className }: { onScan: (code: string) =>
   const [flash, setFlash] = useState(0)
   const last = useRef<{ code: string; at: number }>({ code: '', at: 0 })
   const cb = useRef(onScan)
-  cb.current = onScan
+  useEffect(() => {
+    cb.current = onScan
+  }, [onScan])
 
   useEffect(() => {
     if (!on) return
