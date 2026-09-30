@@ -18,6 +18,8 @@ export type Session = {
     discount_limit_pct: number
     assigned_category_ids: string[]
   } | null
+  // Set when the owner chose or reset this person's password; cleared once they change it.
+  mustChangePassword: boolean
 }
 
 export const getSession = cache(async (): Promise<Session | null> => {
@@ -33,7 +35,8 @@ export const getSession = cache(async (): Promise<Session | null> => {
     .single()
   if (!profile) return null
   const staff = Array.isArray(profile.staff) ? profile.staff[0] : profile.staff
-  return { ...profile, staff: staff ?? null }
+  const mustChangePassword = Boolean((claims.claims.app_metadata as Record<string, unknown> | undefined)?.must_change_password)
+  return { ...profile, staff: staff ?? null, mustChangePassword }
 })
 
 // What each signed-in person may do in the dashboard. The database enforces

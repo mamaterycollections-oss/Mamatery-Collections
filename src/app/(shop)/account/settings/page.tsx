@@ -10,6 +10,7 @@ export default async function AccountSettingsPage() {
     <AccountSettings
       profile={{ full_name: session.full_name ?? '', phone: session.phone ?? '', email: session.email ?? '', marketing_opt_in: data?.marketing_opt_in ?? false }}
       isStaff={session.role !== 'customer'}
+      mustChangePassword={session.mustChangePassword}
     />
   )
 }

@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { AlertTriangle, Download, Loader2 } from 'lucide-react'
+import { AlertTriangle, Download, KeyRound, Loader2 } from 'lucide-react'
 import { PushToggle } from '@/app/dashboard/notifications/notification-controls'
 import { Modal } from '@/components/dash/modal'
 import { useAction } from '@/components/dash/use-action'
 import { useToast } from '@/components/ui/toast'
 import { changePassword, deleteMyAccount, updateProfile } from '../actions'
 
-export function AccountSettings({ profile, isStaff }: { profile: { full_name: string; phone: string; email: string; marketing_opt_in: boolean }; isStaff: boolean }) {
+export function AccountSettings({ profile, isStaff, mustChangePassword }: { profile: { full_name: string; phone: string; email: string; marketing_opt_in: boolean }; isStaff: boolean; mustChangePassword: boolean }) {
   const { pending, run } = useAction()
   const toast = useToast()
   const [p, setP] = useState(profile)
@@ -36,13 +36,14 @@ export function AccountSettings({ profile, isStaff }: { profile: { full_name: st
         <div className="mt-4"><PushToggle /></div>
       </section>
 
-      <section className="rounded-3xl border border-line bg-white p-6">
+      <section id="password" className={`scroll-mt-24 rounded-3xl border bg-white p-6 ${mustChangePassword ? 'border-clay ring-2 ring-clay/30' : 'border-line'}`}>
         <h2 className="font-display text-2xl">Change password</h2>
+        {mustChangePassword && <p className="mt-2 flex items-start gap-2 rounded-xl bg-sand p-3 text-sm"><KeyRound className="mt-0.5 size-4 shrink-0" /> You’re using a password the owner set for you. Choose your own one now — only you should know it.</p>}
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <input type="password" autoComplete="new-password" className="field" placeholder="New password (8+ characters)" value={pw.password} onChange={(e) => setPw({ ...pw, password: e.target.value })} aria-label="New password" />
           <input type="password" autoComplete="new-password" className="field" placeholder="Type it again" value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} aria-label="Confirm password" />
         </div>
-        <button disabled={pending || !pw.password} onClick={() => run(() => changePassword(pw.password, pw.confirm), { onSuccess: () => setPw({ password: '', confirm: '' }), refresh: false })} className="btn btn-light mt-4">Update password</button>
+        <button disabled={pending || !pw.password} onClick={() => run(() => changePassword(pw.password, pw.confirm), { onSuccess: () => setPw({ password: '', confirm: '' }), refresh: mustChangePassword })} className="btn btn-light mt-4">Update password</button>
       </section>
 
       <section className="rounded-3xl border border-line bg-white p-6">

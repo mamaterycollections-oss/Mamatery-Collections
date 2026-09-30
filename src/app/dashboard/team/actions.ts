@@ -11,6 +11,11 @@ import { friendlyError, normalizeKePhone } from '@/lib/utils'
 
 const tempPassword = () => `Mt-${randomBytes(5).toString('base64url')}${Math.floor(Math.random() * 90 + 10)}`
 
+// The owner may type a password or leave it blank to generate one. Either way the
+// person is reminded to replace it with their own after signing in.
+const chosenPassword = z.string().trim().max(72, 'Password is too long').refine((s) => s === '' || s.length >= 8, 'Password must be at least 8 characters').optional()
+const MUST_CHANGE = { must_change_password: true }
+
 const staffSchema = z.object({
   role: z.enum(['sales_manager', 'sales_attendant']),
   assigned_category_ids: z.array(z.uuid()).max(50),
@@ -22,6 +27,7 @@ const newSchema = staffSchema.extend({
   full_name: z.string().trim().min(2, 'Enter their name').max(120),
   email: z.string().trim().toLowerCase().email('Enter a valid email'),
   phone: z.string().trim().optional(),
+  password: chosenPassword,
 })
 
 export async function createStaff(input: z.input<typeof newSchema>): Promise<ActionResult<{ password: string | null; existing: boolean }>> {
@@ -40,8 +46,8 @@ export async function createStaff(input: z.input<typeof newSchema>): Promise<Act
   let userId = existing?.id
   let password: string | null = null
   if (!userId) {
-    password = tempPassword()
-    const { data, error } = await admin.auth.admin.createUser({ email: v.email, password, email_confirm: true, user_metadata: { full_name: v.full_name, phone } })
+    password = v.password || tempPassword()
+    const { data, error } = await admin.auth.admin.createUser({ email: v.email, password, email_confirm: true, user_metadata: { full_name: v.full_name, phone }, app_metadata: MUST_CHANGE })
     if (error) return { error: friendlyError(error, 'Could not create the login') }
     userId = data.user.id
   }
@@ -86,13 +92,15 @@ export async function setStaffActive(userId: string, active: boolean): Promise<A
   return { ok: true, message: active ? 'Staff member re-activated' : 'Staff member deactivated — they can no longer sign in' }
 }
 
-export async function resetStaffPassword(userId: string): Promise<ActionResult<{ password: string }>> {
+export async function resetStaffPassword(userId: string, chosen?: string): Promise<ActionResult<{ password: string }>> {
   await requireStaff('owner')
+  const p = chosenPassword.safeParse(chosen)
+  if (!p.success) return { error: p.error.issues[0].message }
   const supabase = await createClient()
   const { data } = await supabase.from('staff').select('user_id').eq('user_id', userId).maybeSingle()
   if (!data) return { error: 'Not a staff member' }
-  const password = tempPassword()
-  const { error } = await createAdminClient().auth.admin.updateUserById(userId, { password })
+  const password = p.data || tempPassword()
+  const { error } = await createAdminClient().auth.admin.updateUserById(userId, { password, app_metadata: MUST_CHANGE })
   if (error) return { error: friendlyError(error) }
   return { ok: true, data: { password } }
 }

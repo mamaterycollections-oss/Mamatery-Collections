@@ -11,8 +11,8 @@ import { cn, ROLE_LABEL } from '@/lib/utils'
 import { createStaff, resetStaffPassword, setStaffActive, updateStaff } from './actions'
 
 type Staff = { userId: string; name: string; email: string; phone: string; role: 'sales_manager' | 'sales_attendant'; categories: string[]; margins: boolean; discount: number; active: boolean }
-type Form = { full_name: string; email: string; phone: string; role: Staff['role']; categories: string[]; margins: boolean; discount: string }
-const blank: Form = { full_name: '', email: '', phone: '', role: 'sales_attendant', categories: [], margins: false, discount: '5' }
+type Form = { full_name: string; email: string; phone: string; password: string; role: Staff['role']; categories: string[]; margins: boolean; discount: string }
+const blank: Form = { full_name: '', email: '', phone: '', password: '', role: 'sales_attendant', categories: [], margins: false, discount: '5' }
 
 export function TeamManager({ staff, categories }: { staff: Staff[]; categories: { id: string; name: string }[] }) {
   const { pending, run } = useAction()
@@ -20,20 +20,22 @@ export function TeamManager({ staff, categories }: { staff: Staff[]; categories:
   const [editing, setEditing] = useState<Staff | 'new' | null>(null)
   const [form, setForm] = useState<Form>(blank)
   const [secret, setSecret] = useState<{ email: string; password: string } | null>(null)
+  const [resetting, setResetting] = useState<Staff | null>(null)
+  const [newPw, setNewPw] = useState('')
   const catName = (id: string) => categories.find((c) => c.id === id)?.name ?? '?'
 
   const open = (s: Staff | 'new') => {
     setEditing(s)
-    setForm(s === 'new' ? blank : { full_name: s.name, email: s.email, phone: s.phone, role: s.role, categories: s.categories, margins: s.margins, discount: String(s.discount) })
+    setForm(s === 'new' ? blank : { full_name: s.name, email: s.email, phone: s.phone, password: '', role: s.role, categories: s.categories, margins: s.margins, discount: String(s.discount) })
   }
   const submit = () => {
     const perms = { role: form.role, assigned_category_ids: form.categories, can_view_margins: form.margins, discount_limit_pct: Number(form.discount) || 0 }
     if (editing === 'new') {
-      run(() => createStaff({ ...perms, full_name: form.full_name, email: form.email, phone: form.phone }), {
+      run(() => createStaff({ ...perms, full_name: form.full_name, email: form.email, phone: form.phone, password: form.password }), {
         onSuccess: (d) => {
           setEditing(null)
           if (d?.password) setSecret({ email: form.email, password: d.password })
-          else toast.success('Existing account promoted to staff', 'They sign in with their current password.')
+          else toast.success('Existing account promoted to staff', form.password ? 'They already had an account, so their own password was kept.' : 'They sign in with their current password.')
         },
       })
     } else if (editing) {
@@ -58,7 +60,7 @@ export function TeamManager({ staff, categories }: { staff: Staff[]; categories:
                 <td>
                   <div className="flex justify-end gap-1">
                     <button onClick={() => open(s)} className="btn-icon btn-ghost" aria-label="Edit permissions" title="Edit permissions"><Pencil className="size-4" /></button>
-                    <button onClick={() => confirm(`Reset ${s.name}'s password?`) && run(() => resetStaffPassword(s.userId), { refresh: false, onSuccess: (d) => d && setSecret({ email: s.email, password: d.password }) })} className="btn-icon btn-ghost" aria-label="Reset password" title="Reset password"><KeyRound className="size-4" /></button>
+                    <button onClick={() => { setNewPw(''); setResetting(s) }} className="btn-icon btn-ghost" aria-label="Reset password" title="Reset password"><KeyRound className="size-4" /></button>
                   </div>
                 </td>
               </tr>
@@ -76,6 +78,11 @@ export function TeamManager({ staff, categories }: { staff: Staff[]; categories:
               <div className="grid gap-3 sm:grid-cols-2">
                 <div><label className="label" htmlFor="se">Email (their login)</label><input id="se" type="email" className="field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
                 <div><label className="label" htmlFor="sp">Phone</label><input id="sp" type="tel" className="field" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
+              </div>
+              <div>
+                <label className="label" htmlFor="spw">Password <span className="font-normal text-muted">(optional)</span></label>
+                <input id="spw" type="text" autoComplete="off" spellCheck={false} className="field" placeholder="Leave blank to generate one" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+                <p className="hint">At least 8 characters. They’ll be asked to change it after signing in.</p>
               </div>
             </>
           )}
@@ -115,8 +122,24 @@ export function TeamManager({ staff, categories }: { staff: Staff[]; categories:
         </div>
       </Modal>
 
+      <Modal open={resetting != null} onClose={() => setResetting(null)} title={`Reset ${resetting?.name ?? ''}’s password`}>
+        <label className="label" htmlFor="rpw">New password <span className="font-normal text-muted">(optional)</span></label>
+        <input id="rpw" type="text" autoComplete="off" spellCheck={false} className="field" placeholder="Leave blank to generate one" value={newPw} onChange={(e) => setNewPw(e.target.value)} />
+        <p className="hint">At least 8 characters. Their old password stops working, and they’ll be asked to change this one after signing in.</p>
+        <button
+          disabled={pending}
+          onClick={() => {
+            const s = resetting
+            if (s) run(() => resetStaffPassword(s.userId, newPw), { refresh: false, onSuccess: (d) => { setResetting(null); if (d) setSecret({ email: s.email, password: d.password }) } })
+          }}
+          className="btn btn-primary mt-4 w-full"
+        >
+          {pending && <Loader2 className="size-4 animate-spin" />} Reset password
+        </button>
+      </Modal>
+
       <Modal open={secret != null} onClose={() => setSecret(null)} title="Login details">
-        <p className="text-sm text-muted">Share these privately (e.g. in person or WhatsApp). This password is shown only once — ask them to change it after signing in.</p>
+        <p className="text-sm text-muted">Share these privately (e.g. in person or WhatsApp). This password is shown only once. They’ll be asked to change it after signing in.</p>
         <div className="mt-4 space-y-2 rounded-2xl bg-paper p-4 font-mono text-sm">
           <p>Email: {secret?.email}</p>
           <p>Password: <b>{secret?.password}</b></p>

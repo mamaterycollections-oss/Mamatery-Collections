@@ -91,7 +91,12 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
      `PAYSTACK_SECRET_KEY`, or turn on cash on delivery per zone. Then `RESEND_API_KEY`/`EMAIL_FROM`, `AFRICASTALKING_*`.
    - Rotate Supabase DB password + service-role key, update `.env.local` and Vercel, redeploy.
    - Hobby plan is non-commercial only — upgrade to Pro before taking real orders.
-7. **(OWNER)** Confirm store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
+   - Remove the demo accounts (incl. a second owner, `owner@mamaterry.test`) and demo catalog before launch: `npm run seed -- --clear`.
+7. ✅ Real owner login created (30 Sep 2026): `mamaterycollections@gmail.com` (password chosen by the owner; not stored here).
+   Staff accounts: Dashboard → Team → Add staff. The owner may type a password (8+ chars) or leave it blank to generate one;
+   the same on "Reset password". Owner-set passwords flag `app_metadata.must_change_password` → the staff member sees a
+   reminder banner in the dashboard until they change it in Account → Settings (cleared automatically).
+8. **(OWNER)** Confirm store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
 
 All build work that doesn't need you is finished (session 1 end, 30 Sep 2026). Extra polish done at the end: COD orders
 alert staff by push/email, "Install app" prompt on the storefront, lint clean, production build passes (55 pages).

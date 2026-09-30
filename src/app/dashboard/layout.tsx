@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import { KeyRound } from 'lucide-react'
 import { DashShell } from '@/components/dash/shell'
 import { requireStaff } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
@@ -21,6 +23,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
       unread={unread ?? 0}
       badges={{ orders: c.needs_action ?? 0, reviews: c.pending_reviews ?? 0, inventory: (c.low_stock ?? 0) + (c.out_of_stock ?? 0) }}
     >
+      {session.mustChangePassword && (
+        <Link href="/account/settings#password" className="no-print mb-6 flex items-center gap-3 rounded-2xl border border-clay/30 bg-clay-soft p-4 text-sm">
+          <KeyRound className="size-5 shrink-0 text-clay" />
+          <span className="flex-1"><b>Change your password.</b> You’re signed in with a password the owner set for you — choose your own.</span>
+          <span className="btn btn-primary btn-sm shrink-0">Change</span>
+        </Link>
+      )}
       {children}
     </DashShell>
   )

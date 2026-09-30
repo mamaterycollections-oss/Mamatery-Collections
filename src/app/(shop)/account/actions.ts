@@ -24,12 +24,18 @@ export async function updateProfile(input: { full_name: string; phone: string; m
 }
 
 export async function changePassword(password: string, confirm: string): Promise<ActionResult> {
-  await requireUser()
+  const session = await requireUser()
   if (password.length < 8) return { error: 'Password must be at least 8 characters' }
   if (password !== confirm) return { error: 'The passwords don’t match' }
   const supabase = await createClient()
   const { error } = await supabase.auth.updateUser({ password })
   if (error) return { error: friendlyError(error, 'Could not change the password') }
+  if (session.mustChangePassword) {
+    // Clear the owner-set-password reminder, then refresh so the new token no longer carries it.
+    await createAdminClient().auth.admin.updateUserById(session.id, { app_metadata: { must_change_password: null } })
+    await supabase.auth.refreshSession()
+    revalidatePath('/', 'layout')
+  }
   return { ok: true, message: 'Password changed' }
 }
 
