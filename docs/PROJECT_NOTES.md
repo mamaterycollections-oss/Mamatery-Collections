@@ -13,6 +13,7 @@ start Claude Code and say: **"Read docs/PROJECT_NOTES.md and continue."**
 | What | Where |
 | --- | --- |
 | Project folder | `C:\Users\TECNO BROTHERS\Desktop\mamaterry-collections` |
+| GitHub | https://github.com/mamaterycollections-oss/Mamatery-Collections (**public** repo, branch `main`) |
 | Supabase project | ref `dscveoemqbvjtnccorxl` (region eu-central-1, Frankfurt) |
 | Secrets | `.env.local` only (git-ignored). Never commit it; copy values into Vercel's env settings. |
 | Database changes | `supabase/migrations/*.sql` → `npm run db:push` (also regenerates TypeScript types) |
@@ -68,7 +69,7 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
 - ✅ Customer account (orders, addresses, settings, data export, self-service account deletion), wishlist,
   legal/help pages (privacy, terms, delete-account, delivery-returns, FAQ, contact, about), offline + 404 pages, sitemap/robots.
 - ✅ Verified: `npm run test:rls` (37/37 pass), `node scripts/e2e-checkout.mjs`, `node scripts/e2e-pos.mjs <barcode>`,
-  `npx next build` succeeds. All work committed on branch `main` (local only — not pushed yet).
+  `npx next build` succeeds. All work committed on branch `main` (pushed to GitHub on 30 Sep 2026).
 
 ### NEXT STEPS (resume here)
 1. ✅ DONE — Write `docs/DEPLOYMENT.md` (Vercel env vars, Supabase Auth URL config + Resend SMTP, Daraja sandbox→production,
@@ -77,7 +78,8 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
    assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
 3. ✅ DONE (re-run `node scripts/store-screenshots.mjs` with real products before launch) — Capture store screenshots into `public/screenshots/{home,product,checkout}.png` (1080×1920) — manifest already references them.
 4. ✅ DONE — Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.
-5. **(YOU)** Connect GitHub (create an empty private repo, then `git remote add origin … && git push -u origin main`) and deploy to Vercel — see `docs/DEPLOYMENT.md`.
+5. ✅ GitHub connected and pushed (30 Sep 2026). **(YOU)** Deploy to Vercel: import the repo, add env vars from `.env.local` — see `docs/DEPLOYMENT.md`.
+   The repo is public: never commit `.env.local`, keys or `docs/LOCAL_CREDENTIALS.md` (all git-ignored).
 6. **(OWNER)** Confirm store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
 
 All build work that doesn't need you is finished (session 1 end, 30 Sep 2026). Extra polish done at the end: COD orders
