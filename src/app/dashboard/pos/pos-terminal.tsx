@@ -269,7 +269,7 @@ export function PosTerminal({ drawer, discountLimit, cashier }: { drawer: { id: 
       </div>
 
       {/* Right: payment */}
-      <aside className="flex flex-col border-t border-line bg-white p-4 sm:p-6 lg:border-t-0 lg:border-l">
+      <aside id="pos-pay" className="flex scroll-mt-16 flex-col border-t border-line bg-white p-4 pb-24 sm:p-6 lg:border-t-0 lg:border-l lg:pb-6">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-muted">Items</span><span className="font-semibold">{items.reduce((s, i) => s + i.qty, 0)}</span></div>
           <div className="flex justify-between"><span className="text-muted">Subtotal</span><span className="font-semibold tabular-nums">{formatKes(subtotal)}</span></div>
@@ -339,6 +339,14 @@ export function PosTerminal({ drawer, discountLimit, cashier }: { drawer: { id: 
           <p className="mt-2 text-center text-[0.7rem] text-muted">Cashier: {cashier}</p>
         </div>
       </aside>
+
+      {/* Phone: sticky total that jumps to payment */}
+      {items.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-line bg-white/95 p-3 pb-safe backdrop-blur lg:hidden">
+          <div className="flex-1"><p className="text-xs text-muted">{items.reduce((s, i) => s + i.qty, 0)} item(s)</p><p className="font-display text-2xl tabular-nums">{formatKes(total)}</p></div>
+          <button onClick={() => document.getElementById('pos-pay')?.scrollIntoView({ behavior: 'smooth' })} className="btn btn-accent">Take payment</button>
+        </div>
+      )}
 
       {/* Sale complete */}
       <AnimatePresence>

@@ -31,7 +31,7 @@ export function StatCard({ label, value, sub, Icon, tone = 'default', href }: { 
           </span>
         )}
       </div>
-      <p className="mt-2 text-2xl font-extrabold tracking-tight tabular-nums sm:text-3xl">{value}</p>
+      <p className="mt-2 text-xl font-extrabold tracking-tight whitespace-nowrap tabular-nums sm:text-3xl">{value}</p>
       {sub && <p className="mt-1 text-xs text-muted">{sub}</p>}
     </div>
   )

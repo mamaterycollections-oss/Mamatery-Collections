@@ -76,7 +76,7 @@ Africa's Talking (SMS) · Resend (email) · Web Push (VAPID) · installable PWA 
 2. ✅ DONE — Write `docs/PLAY_STORE.md` + `android/twa-manifest.json` (Bubblewrap TWA, package `ke.co.mamaterrycollections.app`,
    assetlinks via ANDROID_* env vars, data-safety answers, content rating, 12-tester closed test rule, screenshots).
 3. ✅ DONE (re-run `node scripts/store-screenshots.mjs` with real products before launch) — Capture store screenshots into `public/screenshots/{home,product,checkout}.png` (1080×1920) — manifest already references them.
-4. Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.
+4. ✅ DONE — Visual QA pass on phone widths for dashboard pages (inventory, settings, team) and fix anything cramped.
 5. Connect GitHub (user creates repo, then `git remote add origin … && git push -u origin main`) and deploy to Vercel.
 6. Owner to confirm: store contact details, delivery fees, return exclusions in /terms (final sale/underwear/earrings were my suggestion).
 

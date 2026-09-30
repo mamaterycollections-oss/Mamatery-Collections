@@ -154,9 +154,9 @@ function ActionTile({ href, label, value, Icon, urgent }: { href: string; label:
       <span className={`grid size-10 place-items-center rounded-xl ${hot ? 'bg-clay text-white' : 'bg-sand'}`}><Icon className="size-5" /></span>
       <span className="min-w-0 flex-1">
         <span className="block text-2xl leading-none font-extrabold tabular-nums">{value ?? 0}</span>
-        <span className="mt-1 block truncate text-xs font-semibold text-muted">{label}</span>
+        <span className="mt-1 block text-xs leading-tight font-semibold text-muted">{label}</span>
       </span>
-      <ArrowRight className="size-4 text-muted transition group-hover:translate-x-0.5" />
+      <ArrowRight className="hidden size-4 shrink-0 text-muted transition group-hover:translate-x-0.5 sm:block" />
     </Link>
   )
 }

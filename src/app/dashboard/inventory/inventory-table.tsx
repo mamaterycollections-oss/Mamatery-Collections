@@ -46,7 +46,7 @@ export function InventoryTable({ rows, margins }: { rows: Row[]; margins: boolea
         <div className="overflow-x-auto">
           <table className="table">
             <thead>
-              <tr><th>Item</th><th>SKU / barcode</th><th>Stock</th><th className="text-right">Price</th>{margins && <th className="text-right">Cost</th>}<th className="text-right">Actions</th></tr>
+              <tr><th>Item</th><th className="hidden md:table-cell">SKU / barcode</th><th>Stock</th><th className="hidden text-right sm:table-cell">Price</th>{margins && <th className="hidden text-right md:table-cell">Cost</th>}<th className="text-right">Actions</th></tr>
             </thead>
             <tbody>
               {rows.map((r) => (
@@ -60,13 +60,13 @@ export function InventoryTable({ rows, margins }: { rows: Row[]; margins: boolea
                       </div>
                     </Link>
                   </td>
-                  <td className="font-mono text-xs leading-tight">{r.sku}<br /><span className="text-muted">{r.barcode}</span></td>
+                  <td className="hidden font-mono text-xs leading-tight md:table-cell">{r.sku}<br /><span className="text-muted">{r.barcode}</span></td>
                   <td><StockBadge qty={r.qty} threshold={r.threshold} /></td>
-                  <td className="text-right">{formatKes(r.price)}</td>
-                  {margins && <td className="text-right text-muted">{r.cost != null ? formatKes(r.cost) : '—'}</td>}
+                  <td className="hidden text-right sm:table-cell">{formatKes(r.price)}</td>
+                  {margins && <td className="hidden text-right text-muted md:table-cell">{r.cost != null ? formatKes(r.cost) : '—'}</td>}
                   <td>
                     <div className="flex justify-end gap-1">
-                      <button onClick={() => open('restock', r)} className="btn btn-light btn-sm" title="Receive stock"><PackagePlus className="size-4" /> Restock</button>
+                      <button onClick={() => open('restock', r)} className="btn btn-light btn-sm" title="Receive stock"><PackagePlus className="size-4" /> <span className="hidden sm:inline">Restock</span></button>
                       <button onClick={() => open('adjust', r)} className="btn-icon btn-ghost" title="Adjust (damage, loss, correction)" aria-label="Adjust stock"><PackageMinus className="size-4" /></button>
                       <button onClick={() => open('history', r)} className="btn-icon btn-ghost" title="Stock history" aria-label="Stock history"><History className="size-4" /></button>
                     </div>
